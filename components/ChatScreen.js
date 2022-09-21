@@ -16,7 +16,7 @@ const useStyles = makeStyles({
   container: (darkMode) => ({
     width: "100%",
     position: "relative",
-    height: "100%",
+    height: "95%",
     background: darkMode ? "#282a34" : "#fff",
     padding: "0",
     margin: "0",
@@ -24,7 +24,7 @@ const useStyles = makeStyles({
   ChatContainer: (darkMode) => ({
     background: darkMode ? "#3c3f51" : "#e8e6e6",
     width: "100%",
-    height: "83%",
+    height: "85%",
     overflowX: " hidden",
     display: "flex",
     flexDirection: "column",
@@ -135,7 +135,7 @@ const ChatTime = styled.span`
   position: relative;
   bottom: 0;
   font-size: 0.6rem;
-  margin: 0 0.5rem;
+  margin: 5rem 0.1rem 0.5rem 0.8rem;
 `;
 
 const DeleteSpan = styled.span`
@@ -145,8 +145,8 @@ const DeleteSpan = styled.span`
 const SenderMessage = styled.p`
   align-self: flex-start;
   padding: 0.8rem 1.5rem;
-  background: ${(props) => (props.darkMode ? "#282a34" : "white")};
-  color: ${(props) => (props.darkMode ? "#f9f9f9" : "black")};
+  background: ${(props) => (props.darkMode ? "white" : "white")};
+  color: ${(props) => (props.darkMode ? "black" : "black")};
   border-radius: 0.6rem;
   margin: 0.5rem 0;
   transition: 0.3s ease;
@@ -158,8 +158,8 @@ const SenderMessage = styled.p`
 const UserMessage = styled.p`
   align-self: flex-end;
   padding: 0.8rem 1.5rem;
-  background: ${(props) => (props.darkMode ? "#282a34" : "white")};
-  color: ${(props) => (props.darkMode ? "#f9f9f9" : "black")};
+  background: ${(props) => (props.darkMode ? "#98FB98" : "#98FB98")};
+  color: ${(props) => (props.darkMode ? "black" : "black")};
   border-radius: 0.6rem;
   margin: 0.5rem 0;
   transition: 0.3s ease;

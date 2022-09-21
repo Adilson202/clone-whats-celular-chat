@@ -1,4 +1,4 @@
-import styled from "styled-components";
+//import styled from "styled-components";
 import { IconButton, InputBase, Box, makeStyles } from "@material-ui/core";
 import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
 import SendIcon from "@material-ui/icons/Send";
@@ -10,6 +10,7 @@ import firebase from "firebase/app";
 import { Picker } from "emoji-mart";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { DarkModeContext } from "../context/DarkMode";
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 
 const useStyles = makeStyles({
   container: {
@@ -72,7 +73,10 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
   return (
     <Box className={classes.container} elevation={0}>
       <IconButton onClick={toggleEmoji}>
-        <EmojiEmotionsIcon />
+        <EmojiEmotionsIcon />        
+      </IconButton>
+      <IconButton>
+        <AttachFileIcon />
       </IconButton>
       <Picker
         onClick={handleEmoji}
@@ -83,8 +87,8 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
                 visibility: "visible",
                 opacity: 1,
                 position: "absolute",
-                top: "50%",
-                left: "50%",
+                top: "58%",
+                left: "20%",
                 transform: "translate(-50%, -50%) scale(1)",
                 zIndex: 2,
                 transition: "300ms ease-in-out",
@@ -109,6 +113,8 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
           background: darkMode ? "#3c3f51" : "#eee",
           padding: "0.3rem 0.6rem",
           margin: "0 1rem",
+          borderRadius: "10px",
+          border: "1px solid gray",
         }}
         value={chatText}
         fullWidth
@@ -123,7 +129,7 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
           sendChat();
         }}
       >
-        <SendIcon />
+        <SendIcon />        
       </IconButton>
     </Box>
   );

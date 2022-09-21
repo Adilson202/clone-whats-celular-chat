@@ -150,7 +150,7 @@ const SideBar = () => {
             width={50}
             alt="App Logo"
           />
-          <Typography variant="subtitle1">WhatsApp 2.0</Typography>
+          <Typography variant="subtitle1">WhatsApp-Chat</Typography>
         </div>
         <Button
           onClick={() => {
@@ -207,7 +207,7 @@ const SideBar = () => {
       </SpaceContainer>
       <Divider />
       <SpaceContainer>
-        <Button onClick={handleNewUser} style={{ padding: "0.6rem 1rem" }}>
+        <Button onClick={handleNewUser} style={{ padding: "0.1rem 1rem" }}>
           start new chat
         </Button>
       </SpaceContainer>

@@ -36,7 +36,7 @@ const Chat = () => {
 
   return (
     <Container>
-      <PageTitle title="WhatsApp 2.0" />
+      <PageTitle title="WhatsApp-Chat" />
       <SideBar />
       <ChatScreen headerTitle={receiverEmail} />
     </Container>

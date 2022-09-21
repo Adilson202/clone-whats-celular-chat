@@ -1,4 +1,4 @@
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 import { useMemo, useContext } from "react";
 import { DarkModeContext } from "./context/DarkMode";
 
@@ -6,7 +6,7 @@ const ThemeHook = ({ children }) => {
   const [darkMode, setDarkMode] = useContext(DarkModeContext);
   const theme = useMemo(
     () =>
-      createMuiTheme({
+      createTheme({
         palette: {
           type: darkMode ? "dark" : "light",
         },
