@@ -1,13 +1,8 @@
 //import styled from "styled-components";
-import {
-  IconButton,
-  InputBase,
-  Box,
-  makeStyles,
-} from "@material-ui/core";
+import { IconButton, InputBase, Box, makeStyles } from "@material-ui/core";
 import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
 import SendIcon from "@material-ui/icons/Send";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { db, auth, storage } from "../firebase";
 import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -15,8 +10,7 @@ import firebase from "firebase/app";
 import { Picker } from "emoji-mart";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { DarkModeContext } from "../context/DarkMode";
-//import AttachFileIcon from "@mui/icons-material/AttachFile";
-import { v4 } from "uuid";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
 
 const useStyles = makeStyles({
   container: {
@@ -54,7 +48,6 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
               sender: user.email,
               message: chatText,
               time: new Date().getTime().toString(),
-              
             }),
           },
           { merge: true }
@@ -77,29 +70,32 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
     setShowEmoji((prev) => !prev);
   };
 
-
   ///////////////////////////fotos//////////////////////////
+
   const [image, setImage] = useState(null);
   const [url, setUrl] = useState("");
-  const [progress, setProgress] = useState(0);
 
-  const handleChange = e => {
+  function handleChange(e) {
     if (e.target.files[0]) {
       setImage(e.target.files[0]);
     }
-  };
+  }
 
-  const handleUpload = () => {
+  useEffect(() => {
+    if (image !== null) {
+      handleUpload();
+    }
+  }, [image]);
+
+  function handleUpload() {
+    if (image === null) {
+      return;
+    }
     const uploadTask = storage.ref(`fotos/${image.name}`).put(image);
     uploadTask.on(
       "state_changed",
-      snapshot => {
-        const progress = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        );
-        setProgress(progress);
-      },
-      error => {
+      "",
+      (error) => {
         console.log(error);
       },
       () => {
@@ -107,15 +103,13 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
           .ref("fotos")
           .child(image.name)
           .getDownloadURL()
-          .then(url => {
+          .then((url) => {
             setUrl(url);
           });
       }
     );
-  };  
-
-  
-
+  }
+  /////////////////////////////////////////////
 
   return (
     <Box className={classes.container} elevation={0}>
@@ -123,18 +117,19 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
         <EmojiEmotionsIcon />
       </IconButton>
 
-      {/* <IconButton>
+      {/* ////////////////////////////fotos//////////////////////// */}
+      <IconButton variant="contained" component="label">
         <AttachFileIcon />
-      </IconButton> */}
-
-    <div>
-      <progress value={progress} max="100" />      
-      <input type="file" onChange={handleChange} />
-      <button onClick={handleUpload}>Upload</button>        
-        <div key={v4()}>
-            <img key={v4()} src={url} height={100} width={200}/>
-        </div>
-    </div>
+        <input
+          type="file"
+          onChange={(e) => {
+            handleChange(e);
+          }}
+          accept="image/*"
+          hidden
+        />
+      </IconButton>
+      {url ? <img src={url} height={50} width={100} /> : null}
 
       <Picker
         onClick={handleEmoji}
@@ -165,6 +160,7 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
               }
         }
       />
+
       <InputBase
         placeholder="message..."
         style={{
@@ -182,6 +178,7 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
         onKeyPress={keyboardSend}
         autoFocus={!isMobile ? true : false}
       />
+
       <IconButton
         onClick={() => {
           sendChat();

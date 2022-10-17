@@ -15,7 +15,7 @@ export default function Home() {
 
   return (
     <Container>
-      <PageTitle title="WhatsApp 2.0" />
+      <PageTitle title="WhatsApp" />
       <SideBar />
       <DummyChatScreen darkMode={darkMode}>
         <StartChatText
@@ -24,7 +24,7 @@ export default function Home() {
           }}
           darkMode={darkMode}
         >
-          Click on any chat to start chat.
+          <img src="fondo.png" />
         </StartChatText>
       </DummyChatScreen>
     </Container>

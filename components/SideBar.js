@@ -297,7 +297,7 @@ const TopContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 1rem 0.7rem;
-`;
+`; 
 
 const TopLogoContainer = styled.div`
   display: flex;

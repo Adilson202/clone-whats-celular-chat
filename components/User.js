@@ -6,8 +6,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
 import { useContext } from "react";
 import { SideMenuContext } from "../context/SideMenu";
-import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-import firebase from "firebase/app";
+// import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
+// import firebase from "firebase/app";
 
 const User = ({ email, styledObj }) => {
   const [photoUrl, setPhotoUrl] = useState("");
