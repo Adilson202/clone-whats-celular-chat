@@ -93,6 +93,12 @@ const ChatScreen = ({ headerTitle }) => {
         {chats.map((chat) =>
           chat.sender === user.email ? (
             <UserMessage key={chat.time} darkMode={darkMode}>
+              
+              {chat.image ? (
+                <>
+                <img width={300} src={chat.image} /><br/>
+                </>
+              ) : ''}
               {chat.message}
               <ChatTime>{getChatTime(chat.time)}</ChatTime>
               <DeleteSpan>
@@ -132,8 +138,9 @@ const ChatScreen = ({ headerTitle }) => {
 };
 
 const ChatTime = styled.span`
-  position: relative;
+  position: absolute;
   bottom: 0;
+  right: 1rem;
   font-size: 0.6rem;
   margin: 5rem 0.1rem 0.5rem 0.8rem;
 `;
@@ -144,7 +151,7 @@ const DeleteSpan = styled.span`
 
 const SenderMessage = styled.p`
   align-self: flex-start;
-  padding: 0.8rem 1.5rem;
+  padding: 0.8rem 1.5rem 1.0rem;
   background: ${(props) => (props.darkMode ? "white" : "white")};
   color: ${(props) => (props.darkMode ? "black" : "black")};
   border-radius: 0.6rem;
@@ -157,6 +164,7 @@ const SenderMessage = styled.p`
 
 const UserMessage = styled.p`
   align-self: flex-end;
+  position: relative;
   padding: 0.8rem 1.5rem;
   background: ${(props) => (props.darkMode ? "#98FB98" : "#98FB98")};
   color: ${(props) => (props.darkMode ? "black" : "black")};
