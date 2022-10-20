@@ -1,9 +1,8 @@
-
 import { IconButton, InputBase, Box, makeStyles } from "@material-ui/core";
 import EmojiEmotionsIcon from "@material-ui/icons/EmojiEmotions";
 import SendIcon from "@material-ui/icons/Send";
 import { useContext, useState, useEffect } from "react";
-import { db, auth, storage  } from "../firebase";
+import { db, auth, storage } from "../firebase";
 import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
 import firebase from "firebase/app";
@@ -12,8 +11,6 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { DarkModeContext } from "../context/DarkMode";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import Image from "next/image";
-
-
 
 const useStyles = makeStyles({
   container: {
@@ -41,10 +38,6 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
 
   const sendChat = () => {
     if (chatText.length > 0 || url.length > 0) {
-      // if (image === null) {
-      //   return;
-      // }
-      //sendImage();  
       db.collection("chats")
         .doc(router.query.chatid)
         .set(
@@ -58,24 +51,17 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
           },
           { merge: true }
         );
-      setChatText("");    
+      setChatText("");
       setUrl("");
-      setImage(null);   
-    } 
-    
+      setImage(null);
+    }
+
     db.collection("users").doc(user.uid).set(
       {
         lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
       },
-      { merge: true }      
-    );
-    
-    /*db.collection("fotos").doc().set(
-      {
-        url: url,
-      },
       { merge: true }
-    )*/
+    );
   };
 
   const handleEmoji = (emoji) => {
@@ -88,14 +74,8 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
 
   ///////////////////////////fotos//////////////////////////
   const [image, setImage] = useState(null);
-  const [url, setUrl] = useState("");  
+  const [url, setUrl] = useState("");
 
-  // const sendImage = () => {    
-     
-  //   console.log("Sending image", image, url);   
-  //     setUrl(null);
-  // };  
-  
   function handleChange(e) {
     if (e.target.files[0]) {
       setImage(e.target.files[0]);
@@ -105,7 +85,7 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
   useEffect(() => {
     if (image !== null) {
       handleUpload();
-    }    
+    }
   }, [image]);
 
   function handleUpload() {
@@ -115,7 +95,7 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
     const uploadTask = storage.ref(`fotos/${image.name}`).put(image);
     uploadTask.on(
       "state_changed",
-      (""),
+      "",
       (error) => {
         console.log(error);
       },
@@ -124,8 +104,8 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
           .ref("fotos")
           .child(image.name)
           .getDownloadURL(uploadTask.snapshot.ref)
-          .then((url) => {                   
-             setUrl(url);
+          .then((url) => {
+            setUrl(url);
           });
       }
     );
@@ -150,7 +130,7 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
         />
       </IconButton>
       {url ? <Image src={url} alt={url} height={70} width={120} /> : null}
-          
+
       <Picker
         onClick={handleEmoji}
         set="twitter"

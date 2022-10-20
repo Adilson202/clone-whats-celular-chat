@@ -95,7 +95,7 @@ const ChatScreen = ({ headerTitle }) => {
             <UserMessage key={chat.time} darkMode={darkMode}>              
               {chat.image ? (
                 <>
-                <img width={300} src={chat.image} /><br/>
+                  <img width={200} layout='responsive' src={chat.image} /><br/>
                 </>
               ) : ''}
               {chat.message}
@@ -114,6 +114,11 @@ const ChatScreen = ({ headerTitle }) => {
             </UserMessage>
           ) : (
             <SenderMessage key={chat.time} darkMode={darkMode}>
+              {chat.image ? (
+                <>
+                  <img width={200} layout='responsive' src={chat.image} /><br/>
+                </>
+              ) : ''}
               {chat.message}
               <ChatTime>{getChatTime(chat.time)}</ChatTime>
               <DeleteSpan>
@@ -150,7 +155,8 @@ const DeleteSpan = styled.span`
 
 const SenderMessage = styled.p`
   align-self: flex-start;
-  padding: 0.8rem 1.5rem 1.0rem;
+  position: relative;
+  padding: 0.8rem 1.5rem 1.2rem;
   background: ${(props) => (props.darkMode ? "white" : "white")};
   color: ${(props) => (props.darkMode ? "black" : "black")};
   border-radius: 0.6rem;
