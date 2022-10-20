@@ -90,11 +90,11 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
   const [image, setImage] = useState(null);
   const [url, setUrl] = useState("");  
 
-  const sendImage = () => {    
+  // const sendImage = () => {    
      
-    console.log("Sending image", image, url);   
-      setUrl(null);
-  };  
+  //   console.log("Sending image", image, url);   
+  //     setUrl(null);
+  // };  
   
   function handleChange(e) {
     if (e.target.files[0]) {

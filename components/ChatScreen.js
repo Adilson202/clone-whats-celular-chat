@@ -92,8 +92,7 @@ const ChatScreen = ({ headerTitle }) => {
       >
         {chats.map((chat) =>
           chat.sender === user.email ? (
-            <UserMessage key={chat.time} darkMode={darkMode}>
-              
+            <UserMessage key={chat.time} darkMode={darkMode}>              
               {chat.image ? (
                 <>
                 <img width={300} src={chat.image} /><br/>
@@ -165,7 +164,7 @@ const SenderMessage = styled.p`
 const UserMessage = styled.p`
   align-self: flex-end;
   position: relative;
-  padding: 0.8rem 1.5rem;
+  padding: 0.8rem 1.5rem 1.2rem;
   background: ${(props) => (props.darkMode ? "#98FB98" : "#98FB98")};
   color: ${(props) => (props.darkMode ? "black" : "black")};
   border-radius: 0.6rem;
