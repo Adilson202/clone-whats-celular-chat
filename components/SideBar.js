@@ -81,12 +81,11 @@ const SideBar = () => {
       alert("Already in chats.");
       return { canCreate: false };
     }
-
     return { emails: emails, canCreate: true };
   };
 
   const handleNewUser = () => {
-    let newEmail = prompt("Email of receiver.");
+    let newEmail = prompt("Digite o email");
     let check = checkEmail(newEmail);
     if (check.canCreate) {
       db.collection("users")
@@ -96,10 +95,11 @@ const SideBar = () => {
             emails: [...check.emails, newEmail],
           },
           { merge: true }
-        );
-    }
+        );       
+    }      
   };
 
+  
   const handleDeleteUser = (userEmail) => {
     db.collection("users")
       .doc(user.uid)
@@ -134,6 +134,7 @@ const SideBar = () => {
     setDarkMode(preferDark);
   }, []);
 
+  ////////////////////////////////////////////
   return (
     <Drawer
       classes={{ paper: classes.drawer }}
@@ -146,11 +147,11 @@ const SideBar = () => {
         <div style={{ display: "flex", alignItems: "center" }}>
           <Image
             src="/transparent_logo.png"
-            height={50}
-            width={50}
+            height={60}
+            width={60}
             alt="App Logo"
           />
-          <Typography variant="subtitle1">WhatsApp-Chat</Typography>
+          <Typography variant="subtitle1">Chat</Typography>
         </div>
         <Button
           onClick={() => {
@@ -174,6 +175,7 @@ const SideBar = () => {
                 auth.signOut();
               }}
             >
+              Exit
               <ExitToAppIcon style={darkMode ? { color: "" } : null} />
             </IconButton>
           </Tooltip>
@@ -208,7 +210,7 @@ const SideBar = () => {
       <Divider />
       <SpaceContainer>
         <Button onClick={handleNewUser} style={{ padding: "0.1rem 1rem" }}>
-          start new chat
+          Novo Chat
         </Button>
       </SpaceContainer>
       <Divider />
@@ -297,7 +299,7 @@ const TopContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 1rem 0.7rem;
-`; 
+`;
 
 const TopLogoContainer = styled.div`
   display: flex;

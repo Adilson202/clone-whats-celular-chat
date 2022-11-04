@@ -36,7 +36,7 @@ class MyDocument extends Document {
   render() {
     return (
       <Html lang="en">
-        <Head>
+        <Head>          
           <meta charSet="utf-8" />
           <meta httpEquiv="X-UA-Comatible" content="IE=edge" />
           <meta
@@ -44,6 +44,7 @@ class MyDocument extends Document {
             content="A WhatsApp clone made using next js and firebase."
           />
           <meta name="keywords" content="WhatsApp Clone" />
+          <script async src="http://cdn.onesignal.com/sdks/OneSignalSDK.js" />
         </Head>
         <body>
           <Main />

@@ -23,8 +23,9 @@ export default function Home() {
             setShowMenu(true);
           }}
           darkMode={darkMode}
-        >
-          <img src="fondo.png" />
+        >  
+          <h1>WHATSAPP</h1>        
+          {/* <img src="fondo.png" /> */}
         </StartChatText>
       </DummyChatScreen>
     </Container>
@@ -39,7 +40,7 @@ const DummyChatScreen = styled.div`
   background: ${(props) => (props.darkMode ? "#3c3f51" : "#fff")};
 `;
 
-const StartChatText = styled.p`
+const StartChatText = styled.div`
   font-size: 1.7rem;
   color: ${(props) => (props.darkMode ? "#c1c1c1" : "#848484")};
   text-transform: uppercase;

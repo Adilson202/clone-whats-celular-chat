@@ -11,6 +11,8 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { DarkModeContext } from "../context/DarkMode";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import Image from "next/image";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const useStyles = makeStyles({
   container: {
@@ -72,6 +74,8 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
     setShowEmoji((prev) => !prev);
   };
 
+  const notify = () => toast.success("Cargando Imagen");
+
   ///////////////////////////fotos//////////////////////////
   const [image, setImage] = useState(null);
   const [url, setUrl] = useState("");
@@ -92,6 +96,7 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
     if (image === null) {
       return;
     }
+
     const uploadTask = storage.ref(`fotos/${image.name}`).put(image);
     uploadTask.on(
       "state_changed",
@@ -103,13 +108,17 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
         storage
           .ref("fotos")
           .child(image.name)
-          .getDownloadURL(uploadTask.snapshot.ref)
+          .getDownloadURL()
           .then((url) => {
             setUrl(url);
           });
+        notify();
       }
     );
   }
+  /////////////////Notification/////////////////////////
+
+ 
   /////////////////////////////////////////////
 
   return (
@@ -125,12 +134,14 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
           onChange={(e) => {
             handleChange(e);
           }}
-          accept="image/*"
+          accept="*"
           hidden
         />
+        <ToastContainer position="top-right" reverseOrder={false} />
       </IconButton>
-      {url ? <Image src={url} alt={url} height={70} width={120} /> : null}
-
+      <div>
+        {url ? <Image src={url} alt={url} height={70} width={120} /> : null}
+      </div>
       <Picker
         onClick={handleEmoji}
         set="twitter"
@@ -181,7 +192,7 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
 
       <IconButton
         onClick={() => {
-          sendChat();
+          sendChat();          
         }}
       >
         <SendIcon />
@@ -190,4 +201,4 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
   );
 };
 
-export default ChatTyping;
+export default ChatTyping ;

@@ -11,6 +11,9 @@ import { IconButton, makeStyles, Container, Box } from "@material-ui/core";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import moment from "moment";
 import { DarkModeContext } from "../context/DarkMode";
+import Image from "next/image";
+
+
 
 const useStyles = makeStyles({
   container: (darkMode) => ({
@@ -41,11 +44,13 @@ const useStyles = makeStyles({
 const ChatScreen = ({ headerTitle }) => {
   const [chats, setChats] = useState([]);
   const [showEmoji, setShowEmoji] = useState(false);
+  const [lastMessageTime, setLastMessageTime] = useState(null);
+  const [mensajeNuevo, setmensajeNuevo] = useState(0);
   const router = useRouter();
+
   const [darkMode, setDarkMode] = useContext(DarkModeContext);
-
+  
   const classes = useStyles(darkMode);
-
   const [user] = useAuthState(auth);
   const [chatsDoc, loading] = useDocument(
     firebase.firestore().doc(`chats/${router.query.chatid}`),
@@ -62,7 +67,7 @@ const ChatScreen = ({ headerTitle }) => {
           chats: firebase.firestore.FieldValue.arrayRemove(chat),
         },
         { merge: true }
-      );
+      );      
   };
 
   const getChatTime = (time) => {
@@ -70,35 +75,83 @@ const ChatScreen = ({ headerTitle }) => {
     return moment(numTime).format("LT");
   };
 
+  ///Notification message
+  useEffect(() => {
+    if (chats.length > 0) {
+      let lastMessage = chats[chats.length - 1]        
+      if (lastMessage.time > lastMessageTime && lastMessageTime !== null) {
+        // console.log("Chegando mensaje",lastMessage)
+        if(lastMessage.sender !== user.email){
+        notifyMe("Nuevo Mensaje")
+        }
+      }
+      setLastMessageTime(lastMessage.time)
+    }
+   
+  }, [chats]); 
+
+  ///// reload chats 
   useEffect(() => {
     if (!loading) {
-      setChats(chatsDoc.data().chats);
+      setChats(chatsDoc.data().chats);          
       setTimeout(() => {
         ChatContainerRef.current.scrollTop =
           ChatContainerRef.current.scrollHeight;
       }, 500);
+    }    
+  }, [chatsDoc]); 
+  
+
+  /////////////////////////////////
+
+  function notifyMe( mensagem){
+    if(!Notification){
+      alert('O navegador que você está utilizando não possui o notifications. Tente o Chrome');
+      return;
     }
-  }, [chatsDoc]);
+  
+    if(Notification.permission !== "granted"){
+      Notification.requestPermission();
+    }else{
+      var notification = new Notification(mensagem);
+  
+       notification.onclick = function(){
+        window.focus();
+       };
+    }
+  } 
+  /////////////////////////////////
+  
 
   return (
     <Container className={classes.container}>
-      <ChatHeader email={headerTitle} />
+      <ChatHeader email={headerTitle} mensajeNuevo={mensajeNuevo} />
       <Box
         ref={ChatContainerRef}
         onClick={() => {
           setShowEmoji(false);
         }}
         className={classes.ChatContainer}
-      >
+      >         
         {chats.map((chat) =>
           chat.sender === user.email ? (
-            <UserMessage key={chat.time} darkMode={darkMode}>              
+            <UserMessage key={chat.time} darkMode={darkMode}>                           
               {chat.image ? (
                 <>
-                  <img width={200} layout='responsive' src={chat.image} /><br/>
+                  <div className="unset-img">
+                    <Image
+                      className="custom-img"
+                      layout="fill"
+                      src={chat.image}
+                      objectFit="cover"
+                    />                    
+                  </div>
+                  <br />
                 </>
-              ) : ''}
-              {chat.message}
+              ) : (
+                ""
+              )}                                          
+            {chat.message}           
               <ChatTime>{getChatTime(chat.time)}</ChatTime>
               <DeleteSpan>
                 <IconButton
@@ -116,10 +169,20 @@ const ChatScreen = ({ headerTitle }) => {
             <SenderMessage key={chat.time} darkMode={darkMode}>
               {chat.image ? (
                 <>
-                  <img width={200} layout='responsive' src={chat.image} /><br/>
+                  <div className="unset-img">
+                    <Image
+                      className="custom-img"
+                      layout="fill"
+                      src={chat.image}
+                      objectFit="cover"
+                    />
+                  </div>                  
+                  <br />
                 </>
-              ) : ''}
-              {chat.message}
+              ) : (
+                ""
+              )}                                           
+              {chat.message}              
               <ChatTime>{getChatTime(chat.time)}</ChatTime>
               <DeleteSpan>
                 <IconButton
@@ -153,10 +216,10 @@ const DeleteSpan = styled.span`
   display: none;
 `;
 
-const SenderMessage = styled.p`
+const SenderMessage = styled.div`
   align-self: flex-start;
   position: relative;
-  padding: 0.8rem 1.5rem 1.2rem;
+  padding: 0.8rem 2.0rem 1.3rem;
   background: ${(props) => (props.darkMode ? "white" : "white")};
   color: ${(props) => (props.darkMode ? "black" : "black")};
   border-radius: 0.6rem;
@@ -167,10 +230,10 @@ const SenderMessage = styled.p`
   }
 `;
 
-const UserMessage = styled.p`
+const UserMessage = styled.div`
   align-self: flex-end;
   position: relative;
-  padding: 0.8rem 1.5rem 1.2rem;
+  padding: 0.8rem 2.0rem 1.3rem;
   background: ${(props) => (props.darkMode ? "#98FB98" : "#98FB98")};
   color: ${(props) => (props.darkMode ? "black" : "black")};
   border-radius: 0.6rem;

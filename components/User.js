@@ -6,8 +6,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
 import { useContext } from "react";
 import { SideMenuContext } from "../context/SideMenu";
-// import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-// import firebase from "firebase/app";
+
 
 const User = ({ email, styledObj }) => {
   const [photoUrl, setPhotoUrl] = useState("");
@@ -15,6 +14,8 @@ const User = ({ email, styledObj }) => {
   const [user] = useAuthState(auth);
   const router = useRouter();
   const [showMenu, setShowMenu] = useContext(SideMenuContext);
+
+  const [mensajeNuevo, setmensajeNuevo] = useState(1);
 
   useEffect(() => {
     const userChatRef = db
@@ -68,7 +69,7 @@ const User = ({ email, styledObj }) => {
   }, [email]);
 
   return (
-    <Container onClick={handleChatOpen}>
+    <Container onClick={handleChatOpen}>           
       {photoUrl ? (
         <Avatar src={photoUrl}></Avatar>
       ) : (
@@ -77,6 +78,8 @@ const User = ({ email, styledObj }) => {
       <Typography style={{ marginLeft: "1rem" }} noWrap>
         {email}
       </Typography>
+      {mensajeNuevo > 0 && (
+      <Bolinha>{mensajeNuevo}</Bolinha>)} 
     </Container>
   );
 };
@@ -89,6 +92,16 @@ const Container = styled(ButtonBase)`
   width: 100%;
   padding: 1rem !important;
   cursor: pointer;
+`;
+const Bolinha = styled.span`
+  background-color: green;
+  position: absolute;
+  right: 0;
+  margin-top: 30px;
+  border-radius: 50%;
+  padding: 0 4px ;
+  color: white;
+  font-size: 9pt;
 `;
 
 export default User;

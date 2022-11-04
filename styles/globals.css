@@ -27,3 +27,17 @@ body {
     font-size: 0.6rem;
   }
 }
+
+.custom-img {
+  object-fit: contain;
+  width: 90% !important;
+  position: relative !important;
+  height: unset !important;
+}
+
+.unset-img {
+  width: 20vw;
+}
+.unset-img > div {
+  position: unset !important;
+}

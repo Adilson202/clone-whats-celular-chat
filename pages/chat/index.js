@@ -12,6 +12,24 @@ const Chat = () => {
   const router = useRouter();
   const [user] = useAuthState(auth);
 
+  useEffect(() => {
+    window.OneSignal = window.OneSignal || [];
+    OneSignal.push(function () {
+      OneSignal.init({        
+        appId: "15a309fc-849b-4c16-961d-e2de82ed3f30",
+        notifyButton: {
+          enable: true,
+        },
+
+        allowLocalhostAsSecureOrigin: true,
+      });
+    });
+
+    return () => {
+      window.OneSignal = undefined;
+    };
+  }, []);
+
   const [receiverEmail, setReceiverEmail] = useState("");
 
   useEffect(() => {
@@ -33,6 +51,8 @@ const Chat = () => {
   useEffect(() => {
     getChat();
   }, [router.query.chatid]);
+
+/////////////////////////////////////////////////////
 
   return (
     <Container>

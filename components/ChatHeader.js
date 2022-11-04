@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ChatHeader = ({ email }) => {
+const ChatHeader = ({ email, mensajeNuevo }) => {
   const [showMenu, setShowMenu] = useContext(SideMenuContext);
   const [darkMode, setDarkMode] = useContext(DarkModeContext);
   const [receiver, setReceiver] = useState({});
@@ -100,8 +100,12 @@ const ChatHeader = ({ email }) => {
               )}
               <div style={{ margin: "0 1rem" }}>
                 {email && (
-                  <Typography className={classes.userEmail}>{email}</Typography>
-                )}
+                  <>
+                    <Typography className={classes.userEmail}>{email}                     
+                    </Typography>
+                    
+                  </>
+                  )}
                 {!receiver && (
                   <span className="timeagoclass">Currently Unavailable</span>
                 )}
