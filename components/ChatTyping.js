@@ -38,8 +38,41 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
     }
   };
 
-  const sendChat = () => {
+  const sendChat = async () => {
     if (chatText.length > 0 || url.length > 0) {
+      let emails = (
+        await db.collection("chats").doc(router.query.chatid).get()
+      ).data().emails;
+      console.log(emails);
+
+      const querySnapshot = await db
+        .collection("users")
+        .where("email", "==", emails[0] === user.email ? emails[1] : emails[0])
+        .get();
+
+      querySnapshot.forEach((doc) => {
+        //console.log(doc.id, " => ", doc.data());
+        if (!doc.data().emails.includes(user.email)) {
+          db.collection("users")
+            .doc(doc.id)
+            .set(
+              {
+                emails: [...doc.data().emails, user.email],
+              },
+              { merge: true }
+            );
+        } else {
+          db.collection("users")
+            .doc(doc.id)
+            .set(
+              {
+                ultimomensaje: new Date().getTime(),
+              },
+              { merge: true }
+            );
+        }
+      });
+
       db.collection("chats")
         .doc(router.query.chatid)
         .set(
@@ -118,7 +151,6 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
   }
   /////////////////Notification/////////////////////////
 
- 
   /////////////////////////////////////////////
 
   return (
@@ -192,7 +224,7 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
 
       <IconButton
         onClick={() => {
-          sendChat();          
+          sendChat();
         }}
       >
         <SendIcon />
@@ -201,4 +233,4 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
   );
 };
 
-export default ChatTyping ;
+export default ChatTyping;

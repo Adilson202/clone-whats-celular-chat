@@ -52,19 +52,27 @@ const SideBar = () => {
   const [user] = useAuthState(auth);
   const [chatUsers, setChatUsers] = useState([]);
   const [searchText, setSearchText] = useState("");
-  const [showMenu, setShowMenu] = useContext(SideMenuContext);
-  const [darkMode, setDarkMode] = useContext(DarkModeContext);
+  const [darkMode, setDarkMode] = useContext(DarkModeContext);  
+  const [
+    showMenu,
+    setShowMenu,
+    contadorMensajes,
+    setContadorMensajes,
+    mensajesLeidos,
+    setMensajesLeidos,
+  ] = useContext(SideMenuContext);
+
+  //  const [contadorMensajes, setContadorMensajes] = useState({});
+  //  const [mensajesLeidos, setMensajesLeidos] = useState({});
 
   const classes = useStyles(darkMode);
+  const router = useRouter();
+  const colorArray = ["#ea4335", "#4285f4", "#00c2cb", "#fbbc05", "#34a853"];
 
   const [usersDoc, loading] = useDocument(
     firebase.firestore().doc(`users/${user.uid}`),
     { snapshotListenOptions: { includeMetadataChanges: true } }
   );
-
-  const router = useRouter();
-
-  const colorArray = ["#ea4335", "#4285f4", "#00c2cb", "#fbbc05", "#34a853"];
 
   const checkEmail = (email) => {
     let emails = usersDoc.data().emails;
@@ -95,11 +103,45 @@ const SideBar = () => {
             emails: [...check.emails, newEmail],
           },
           { merge: true }
-        );       
-    }      
+        );
+    }
   };
 
-  
+  const atualizarContador = async () => {
+    let contadorMensajes = {};
+    let novoStatus = {};
+    for (let i = 0; i < usersDoc.data().emails.length; i++) {
+      let email = usersDoc.data().emails[i];
+      ////contador mensajeNuevo
+      let listarChats = await db
+        .collection("chats")
+        .where("emails", "array-contains", email, usersDoc.data().email)        
+        .get();
+      listarChats.forEach((chats) => {
+           if (!chats.data().emails.includes(usersDoc.data().email)) {
+              return;
+           }
+         console.log(email, chats.id, " => ", chats.data());
+        let messages = chats.data().chats;
+        let contador = 0;
+        let timeUltMensaje = 0;
+
+        messages.forEach((message) => {
+          if ((mensajesLeidos[email] ?? 0) < message.time) {
+            contador++;
+          }
+          timeUltMensaje = mensajesLeidos[email] ?? message.time;
+        });
+
+        novoStatus[email] = timeUltMensaje;
+        contadorMensajes[email] = contador;
+      });
+    }
+    setContadorMensajes(contadorMensajes);
+    setMensajesLeidos(novoStatus);
+    console.log(contadorMensajes, novoStatus);
+  };
+
   const handleDeleteUser = (userEmail) => {
     db.collection("users")
       .doc(user.uid)
@@ -113,6 +155,7 @@ const SideBar = () => {
 
   useEffect(() => {
     if (!loading && usersDoc.exists) {
+      atualizarContador();
       setChatUsers(usersDoc.data().emails);
     }
   }, [usersDoc]);
@@ -243,6 +286,7 @@ const SideBar = () => {
               }}
             >
               <User
+                contadorMsg={contadorMensajes[user] ?? 0}
                 email={user}
                 styledObj={{
                   backgroundColor:

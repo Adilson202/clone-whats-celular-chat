@@ -7,15 +7,19 @@ import { useRouter } from "next/router";
 import { useContext } from "react";
 import { SideMenuContext } from "../context/SideMenu";
 
-
-const User = ({ email, styledObj }) => {
+const User = ({ email, styledObj, contadorMsg }) => {
   const [photoUrl, setPhotoUrl] = useState("");
   const [chatId, setChatId] = useState("");
   const [user] = useAuthState(auth);
   const router = useRouter();
-  const [showMenu, setShowMenu] = useContext(SideMenuContext);
-
-  const [mensajeNuevo, setmensajeNuevo] = useState(1);
+  const [
+    showMenu,
+    setShowMenu,
+    contadorMensajes,
+    setContadorMensajes,
+    mensajesLeidos,
+    setMensajesLeidos,
+  ] = useContext(SideMenuContext); 
 
   useEffect(() => {
     const userChatRef = db
@@ -34,7 +38,20 @@ const User = ({ email, styledObj }) => {
     });
   }, [router.query.chatid]);
 
+
   const handleChatOpen = (e) => {
+    let contadorEmail = {}
+    contadorEmail[email] = 0;
+    setContadorMensajes({
+      ...contadorMensajes, ...contadorEmail 
+    })
+    
+    let contadorTime = {}
+    contadorTime[email] = new Date().getTime();
+    setMensajesLeidos({
+      ...mensajesLeidos, ...contadorTime
+    })
+    
     if (chatId !== "") {
       router.push({
         pathname: "/chat",
@@ -69,7 +86,7 @@ const User = ({ email, styledObj }) => {
   }, [email]);
 
   return (
-    <Container onClick={handleChatOpen}>           
+    <Container onClick={handleChatOpen}>
       {photoUrl ? (
         <Avatar src={photoUrl}></Avatar>
       ) : (
@@ -78,8 +95,7 @@ const User = ({ email, styledObj }) => {
       <Typography style={{ marginLeft: "1rem" }} noWrap>
         {email}
       </Typography>
-      {mensajeNuevo > 0 && (
-      <Bolinha>{mensajeNuevo}</Bolinha>)} 
+      {contadorMsg > 0 && <Bolinha>{contadorMsg}</Bolinha>}
     </Container>
   );
 };
@@ -99,7 +115,7 @@ const Bolinha = styled.span`
   right: 0;
   margin-top: 30px;
   border-radius: 50%;
-  padding: 0 4px ;
+  padding: 0 4px;
   color: white;
   font-size: 9pt;
 `;
