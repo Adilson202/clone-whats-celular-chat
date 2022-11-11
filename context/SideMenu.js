@@ -3,7 +3,7 @@ import { useState, createContext } from "react";
 export const SideMenuProvider = ({ children }) => {
   const [showMenu, setShowMenu] = useState(true);
   const [contadorMensajes, setContadorMensajes] = useState({});
-  const [mensajesLeidos, setMensajesLeidos] = useState({});
+  const [mensajesLeidos, setMensajesLeidos] = useState({});  
   return (
     <SideMenuContext.Provider
       value={[
@@ -12,7 +12,7 @@ export const SideMenuProvider = ({ children }) => {
         contadorMensajes,
         setContadorMensajes,
         mensajesLeidos,
-        setMensajesLeidos,
+        setMensajesLeidos,        
       ]}
     >
       {children}

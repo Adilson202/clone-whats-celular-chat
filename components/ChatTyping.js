@@ -14,6 +14,7 @@ import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+
 const useStyles = makeStyles({
   container: {
     display: "flex",
@@ -30,7 +31,7 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
   const [user] = useAuthState(auth);
   const isMobile = useMediaQuery("(max-width:768px)");
   const classes = useStyles();
-  const [darkMode, setDarkMode] = useContext(DarkModeContext);
+  const [darkMode, setDarkMode, url, setUrl] = useContext(DarkModeContext);
 
   const keyboardSend = (e) => {
     if (e.key === "Enter") {
@@ -109,7 +110,8 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
 
   ///////////////////////////fotos//////////////////////////
   const [image, setImage] = useState(null);
-  const [url, setUrl] = useState("");
+  // const [url, setUrl] = useState("");
+  
 
   function handleChange(e) {
     if (e.target.files[0]) {
@@ -149,8 +151,6 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
   }
   /////////////////Notification/////////////////////////
 
-  /////////////////////////////////////////////
-
   return (
     <Box className={classes.container} elevation={0}>
       <IconButton onClick={toggleEmoji}>
@@ -169,9 +169,11 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
         />
         <ToastContainer position="top-right" reverseOrder={false} />
       </IconButton>
-      <div>
+
+      {/* <div>
         {url ? <Image src={url} alt={url} height={70} width={120} /> : null}
-      </div>
+      </div> */}
+
       <Picker
         onClick={handleEmoji}
         set="twitter"

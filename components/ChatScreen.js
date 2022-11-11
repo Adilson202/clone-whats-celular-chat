@@ -12,8 +12,7 @@ import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import moment from "moment";
 import { DarkModeContext } from "../context/DarkMode";
 import Image from "next/image";
-
-
+import PrintImage from "./PrintImage";
 
 const useStyles = makeStyles({
   container: (darkMode) => ({
@@ -48,8 +47,8 @@ const ChatScreen = ({ headerTitle }) => {
   const [mensajeNuevo, setmensajeNuevo] = useState(0);
   const router = useRouter();
 
-  const [darkMode, setDarkMode] = useContext(DarkModeContext);
-  
+  const [darkMode, setDarkMode, url, setUrl] = useContext(DarkModeContext);
+
   const classes = useStyles(darkMode);
   const [user] = useAuthState(auth);
   const [chatsDoc, loading] = useDocument(
@@ -67,7 +66,7 @@ const ChatScreen = ({ headerTitle }) => {
           chats: firebase.firestore.FieldValue.arrayRemove(chat),
         },
         { merge: true }
-      );      
+      );
   };
 
   const getChatTime = (time) => {
@@ -78,50 +77,49 @@ const ChatScreen = ({ headerTitle }) => {
   ///Notification message
   useEffect(() => {
     if (chats.length > 0) {
-      let lastMessage = chats[chats.length - 1]        
+      let lastMessage = chats[chats.length - 1];
       if (lastMessage.time > lastMessageTime && lastMessageTime !== null) {
         // console.log("Chegando mensaje",lastMessage)
-        if(lastMessage.sender !== user.email){
-        notifyMe("Nuevo Mensaje")
+        if (lastMessage.sender !== user.email) {
+          notifyMe("Nuevo Mensaje");
         }
       }
-      setLastMessageTime(lastMessage.time)
+      setLastMessageTime(lastMessage.time);
     }
-   
-  }, [chats]); 
+  }, [chats]);
 
-  ///// reload chats 
+  ///// reload chats
   useEffect(() => {
     if (!loading) {
-      setChats(chatsDoc.data().chats);          
+      setChats(chatsDoc.data().chats);
       setTimeout(() => {
         ChatContainerRef.current.scrollTop =
           ChatContainerRef.current.scrollHeight;
       }, 500);
-    }    
-  }, [chatsDoc]); 
-  
+    }
+  }, [chatsDoc]);
 
   /////////////////////////////////
 
-  function notifyMe(mensagem){
-    if(!Notification){
-      alert('O navegador que você está utilizando não possui o notifications. Tente o Chrome');
+  function notifyMe(mensagem) {
+    if (!Notification) {
+      alert(
+        "O navegador que você está utilizando não possui o notifications. Tente o Chrome"
+      );
       return;
     }
-  
-    if(Notification.permission !== "granted"){
+
+    if (Notification.permission !== "granted") {
       Notification.requestPermission();
-    }else{
+    } else {
       var notification = new Notification(mensagem);
-  
-       notification.onclick = function(){
+
+      notification.onclick = function () {
         window.focus();
-       };
+      };
     }
-  } 
+  }
   /////////////////////////////////
-  
 
   return (
     <Container className={classes.container}>
@@ -132,10 +130,10 @@ const ChatScreen = ({ headerTitle }) => {
           setShowEmoji(false);
         }}
         className={classes.ChatContainer}
-      >         
+      >
         {chats.map((chat) =>
           chat.sender === user.email ? (
-            <UserMessage key={chat.time} darkMode={darkMode}>                           
+            <UserMessage key={chat.time} darkMode={darkMode}>
               {chat.image ? (
                 <>
                   <div className="unset-img">
@@ -144,14 +142,14 @@ const ChatScreen = ({ headerTitle }) => {
                       layout="fill"
                       src={chat.image}
                       objectFit="cover"
-                    />                    
+                    />
                   </div>
                   <br />
                 </>
               ) : (
                 ""
-              )}                                          
-            {chat.message}           
+              )}
+              {chat.message}
               <ChatTime>{getChatTime(chat.time)}</ChatTime>
               <DeleteSpan>
                 <IconButton
@@ -176,13 +174,13 @@ const ChatScreen = ({ headerTitle }) => {
                       src={chat.image}
                       objectFit="cover"
                     />
-                  </div>                  
+                  </div>
                   <br />
                 </>
               ) : (
                 ""
-              )}                                           
-              {chat.message}              
+              )}
+              {chat.message}
               <ChatTime>{getChatTime(chat.time)}</ChatTime>
               <DeleteSpan>
                 <IconButton
@@ -198,6 +196,7 @@ const ChatScreen = ({ headerTitle }) => {
             </SenderMessage>
           )
         )}
+        <PrintImage url={url} />
       </Box>
       <ChatTyping showEmoji={showEmoji} setShowEmoji={setShowEmoji} />
     </Container>
@@ -219,7 +218,7 @@ const DeleteSpan = styled.span`
 const SenderMessage = styled.div`
   align-self: flex-start;
   position: relative;
-  padding: 0.8rem 2.0rem 1.3rem;
+  padding: 0.8rem 2rem 1.3rem;
   background: ${(props) => (props.darkMode ? "white" : "white")};
   color: ${(props) => (props.darkMode ? "black" : "black")};
   border-radius: 0.6rem;
@@ -233,7 +232,7 @@ const SenderMessage = styled.div`
 const UserMessage = styled.div`
   align-self: flex-end;
   position: relative;
-  padding: 0.8rem 2.0rem 1.3rem;
+  padding: 0.8rem 2rem 1.3rem;
   background: ${(props) => (props.darkMode ? "#98FB98" : "#98FB98")};
   color: ${(props) => (props.darkMode ? "black" : "black")};
   border-radius: 0.6rem;
