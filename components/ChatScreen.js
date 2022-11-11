@@ -104,7 +104,7 @@ const ChatScreen = ({ headerTitle }) => {
 
   /////////////////////////////////
 
-  function notifyMe( mensagem){
+  function notifyMe(mensagem){
     if(!Notification){
       alert('O navegador que você está utilizando não possui o notifications. Tente o Chrome');
       return;

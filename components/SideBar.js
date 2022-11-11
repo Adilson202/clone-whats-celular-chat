@@ -52,7 +52,7 @@ const SideBar = () => {
   const [user] = useAuthState(auth);
   const [chatUsers, setChatUsers] = useState([]);
   const [searchText, setSearchText] = useState("");
-  const [darkMode, setDarkMode] = useContext(DarkModeContext);  
+  const [darkMode, setDarkMode] = useContext(DarkModeContext);
   const [
     showMenu,
     setShowMenu,
@@ -61,9 +61,6 @@ const SideBar = () => {
     mensajesLeidos,
     setMensajesLeidos,
   ] = useContext(SideMenuContext);
-
-  //  const [contadorMensajes, setContadorMensajes] = useState({});
-  //  const [mensajesLeidos, setMensajesLeidos] = useState({});
 
   const classes = useStyles(darkMode);
   const router = useRouter();
@@ -112,34 +109,47 @@ const SideBar = () => {
     let novoStatus = {};
     for (let i = 0; i < usersDoc.data().emails.length; i++) {
       let email = usersDoc.data().emails[i];
+
       ////contador mensajeNuevo
       let listarChats = await db
         .collection("chats")
-        .where("emails", "array-contains", email, usersDoc.data().email)        
+        .where("emails", "array-contains", user.email && email)
         .get();
+
       listarChats.forEach((chats) => {
-           if (!chats.data().emails.includes(usersDoc.data().email)) {
-              return;
-           }
-         console.log(email, chats.id, " => ", chats.data());
+        if (chats.data().emails[1] !== usersDoc.data().email) {
+          return;
+        }
+
+        //   if ( ! chats.data().emails.includes(usersDoc.data().email )){
+        //     return ;
+        //  }
+        //console.log(email, chats.id, " => ", chats.data());
         let messages = chats.data().chats;
         let contador = 0;
         let timeUltMensaje = 0;
 
-        messages.forEach((message) => {
-          if ((mensajesLeidos[email] ?? 0) < message.time) {
-            contador++;
+        if (messages.length > 0) {
+          let ultimochat = messages.length - 1;
+          if (messages[ultimochat].sender !== user.email) {
+            messages.forEach((message) => {
+              if ((mensajesLeidos[email] ?? 0) < message.time) {
+                contador++;
+              }
+              timeUltMensaje = mensajesLeidos[email] ?? message.time;
+            });
+          } else {
+            timeUltMensaje = messages[ultimochat].time
           }
-          timeUltMensaje = mensajesLeidos[email] ?? message.time;
-        });
-
+          console.log(messages[ultimochat].sender);          
+        }
         novoStatus[email] = timeUltMensaje;
         contadorMensajes[email] = contador;
       });
     }
     setContadorMensajes(contadorMensajes);
     setMensajesLeidos(novoStatus);
-    console.log(contadorMensajes, novoStatus);
+    // console.log(contadorMensajes, novoStatus);
   };
 
   const handleDeleteUser = (userEmail) => {
@@ -177,7 +187,6 @@ const SideBar = () => {
     setDarkMode(preferDark);
   }, []);
 
-  ////////////////////////////////////////////
   return (
     <Drawer
       classes={{ paper: classes.drawer }}
@@ -241,7 +250,7 @@ const SideBar = () => {
       <SpaceContainer>
         <InputBase
           startAdornment={<SearchIcon style={{ margin: "0 0.5rem" }} />}
-          placeholder="Search chat..."
+          placeholder="Search Chat"
           fullWidth
           style={{ padding: "0 1rem" }}
           onChange={(e) => {
@@ -253,7 +262,7 @@ const SideBar = () => {
       <Divider />
       <SpaceContainer>
         <Button onClick={handleNewUser} style={{ padding: "0.1rem 1rem" }}>
-          Novo Chat
+          New Chat
         </Button>
       </SpaceContainer>
       <Divider />

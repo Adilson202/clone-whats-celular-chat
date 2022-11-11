@@ -43,7 +43,7 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
       let emails = (
         await db.collection("chats").doc(router.query.chatid).get()
       ).data().emails;
-      console.log(emails);
+      //console.log(emails);
 
       const querySnapshot = await db
         .collection("users")
@@ -62,14 +62,12 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
               { merge: true }
             );
         } else {
-          db.collection("users")
-            .doc(doc.id)
-            .set(
-              {
-                ultimomensaje: new Date().getTime(),
-              },
-              { merge: true }
-            );
+          db.collection("users").doc(doc.id).set(
+            {
+              ultimomensaje: new Date().getTime(),
+            },
+            { merge: true }
+          );
         }
       });
 
@@ -183,8 +181,8 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
                 visibility: "visible",
                 opacity: 1,
                 position: "absolute",
-                top: "58%",
-                left: "20%",
+                top: "50%",
+                left: "50%",
                 transform: "translate(-50%, -50%) scale(1)",
                 zIndex: 2,
                 transition: "300ms ease-in-out",
@@ -203,9 +201,8 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
               }
         }
       />
-
       <InputBase
-        placeholder="message..."
+        placeholder="Digite aqui..."
         style={{
           background: darkMode ? "#3c3f51" : "#eee",
           padding: "0.3rem 0.6rem",
@@ -221,7 +218,6 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
         onKeyPress={keyboardSend}
         autoFocus={!isMobile ? true : false}
       />
-
       <IconButton
         onClick={() => {
           sendChat();
