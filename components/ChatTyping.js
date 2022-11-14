@@ -10,10 +10,8 @@ import { Picker } from "emoji-mart";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { DarkModeContext } from "../context/DarkMode";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
-import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 
 const useStyles = makeStyles({
   container: {
@@ -43,8 +41,7 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
     if (chatText.length > 0 || url.length > 0) {
       let emails = (
         await db.collection("chats").doc(router.query.chatid).get()
-      ).data().emails;
-      //console.log(emails);
+      ).data().emails;      
 
       const querySnapshot = await db
         .collection("users")
@@ -52,7 +49,6 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
         .get();
 
       querySnapshot.forEach((doc) => {
-        //console.log(doc.id, " => ", doc.data());
         if (!doc.data().emails.includes(user.email)) {
           db.collection("users")
             .doc(doc.id)
@@ -109,9 +105,8 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
   const notify = () => toast.success("Cargando Imagen");
 
   ///////////////////////////fotos//////////////////////////
-  const [image, setImage] = useState(null);
-  // const [url, setUrl] = useState("");
   
+  const [image, setImage] = useState(null);
 
   function handleChange(e) {
     if (e.target.files[0]) {
@@ -169,10 +164,6 @@ const ChatTyping = ({ showEmoji, setShowEmoji }) => {
         />
         <ToastContainer position="top-right" reverseOrder={false} />
       </IconButton>
-
-      {/* <div>
-        {url ? <Image src={url} alt={url} height={70} width={120} /> : null}
-      </div> */}
 
       <Picker
         onClick={handleEmoji}

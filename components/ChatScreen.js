@@ -18,7 +18,7 @@ const useStyles = makeStyles({
   container: (darkMode) => ({
     width: "100%",
     position: "relative",
-    height: "95%",
+    height: "100%",
     background: darkMode ? "#282a34" : "#fff",
     padding: "0",
     margin: "0",
@@ -26,11 +26,11 @@ const useStyles = makeStyles({
   ChatContainer: (darkMode) => ({
     background: darkMode ? "#3c3f51" : "#e8e6e6",
     width: "100%",
-    height: "85%",
+    height: "80%",
     overflowX: " hidden",
     display: "flex",
     flexDirection: "column",
-    padding: "1rem",
+    padding: "0.5rem",
     scrollBehavior: "smooth",
     msOverflowStyle: "none",
     scrollbarWidth: "none",
@@ -79,7 +79,7 @@ const ChatScreen = ({ headerTitle }) => {
     if (chats.length > 0) {
       let lastMessage = chats[chats.length - 1];
       if (lastMessage.time > lastMessageTime && lastMessageTime !== null) {
-        // console.log("Chegando mensaje",lastMessage)
+        
         if (lastMessage.sender !== user.email) {
           notifyMe("Nuevo Mensaje");
         }
@@ -99,7 +99,7 @@ const ChatScreen = ({ headerTitle }) => {
     }
   }, [chatsDoc]);
 
-  /////////////////////////////////
+  ////////////////////Notificacion/////////////
 
   function notifyMe(mensagem) {
     if (!Notification) {
@@ -157,7 +157,7 @@ const ChatScreen = ({ headerTitle }) => {
                     handleDelete(chat);
                   }}
                   disableRipple
-                  style={{ padding: "0 0.5rem" }}
+                  style={{ padding: "0 0.3rem", background: "red", color: "white"}}
                 >
                   <DeleteForeverIcon style={{ fontSize: "1.2rem" }} />
                 </IconButton>
@@ -188,7 +188,7 @@ const ChatScreen = ({ headerTitle }) => {
                     handleDelete(chat);
                   }}
                   disableRipple
-                  style={{ padding: "0 0.5rem" }}
+                  style={{ padding: "0 0.4rem", background: "red", color: "white" }}
                 >
                   <DeleteForeverIcon style={{ fontSize: "1.2rem" }} />
                 </IconButton>
@@ -217,6 +217,7 @@ const DeleteSpan = styled.span`
 
 const SenderMessage = styled.div`
   align-self: flex-start;
+  border: 1px solid;
   position: relative;
   padding: 0.8rem 2rem 1.3rem;
   background: ${(props) => (props.darkMode ? "white" : "white")};
@@ -231,12 +232,13 @@ const SenderMessage = styled.div`
 
 const UserMessage = styled.div`
   align-self: flex-end;
+  border: 1px solid;
   position: relative;
   padding: 0.8rem 2rem 1.3rem;
-  background: ${(props) => (props.darkMode ? "#98FB98" : "#98FB98")};
+  background: ${(props) => (props.darkMode ? "white" : "white")};
   color: ${(props) => (props.darkMode ? "black" : "black")};
   border-radius: 0.6rem;
-  margin: 0.5rem 0;
+  margin: 0.4rem 0;
   transition: 0.3s ease;
   &:hover span {
     display: initial;

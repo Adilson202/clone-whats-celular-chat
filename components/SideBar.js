@@ -121,10 +121,6 @@ const SideBar = () => {
           return;
         }
 
-        //   if ( ! chats.data().emails.includes(usersDoc.data().email )){
-        //     return ;
-        //  }
-        //console.log(email, chats.id, " => ", chats.data());
         let messages = chats.data().chats;
         let contador = 0;
         let timeUltMensaje = 0;
@@ -141,15 +137,16 @@ const SideBar = () => {
           } else {
             timeUltMensaje = messages[ultimochat].time
           }
-          console.log(messages[ultimochat].sender);          
+          console.log(messages[ultimochat].sender);
+
+          
         }
         novoStatus[email] = timeUltMensaje;
         contadorMensajes[email] = contador;
       });
     }
     setContadorMensajes(contadorMensajes);
-    setMensajesLeidos(novoStatus);
-    // console.log(contadorMensajes, novoStatus);
+    setMensajesLeidos(novoStatus);    
   };
 
   const handleDeleteUser = (userEmail) => {
@@ -227,7 +224,6 @@ const SideBar = () => {
                 auth.signOut();
               }}
             >
-              Exit
               <ExitToAppIcon style={darkMode ? { color: "" } : null} />
             </IconButton>
           </Tooltip>
@@ -311,7 +307,7 @@ const SideBar = () => {
                 className="deleteIcon"
                 style={{ margin: "0.7rem 0" }}
               >
-                <DeleteForeverIcon />
+                <DeleteForeverIcon style= {{background: "red", color:"white" }}/>
               </IconButton>
             )}
           </UserNavigating>
@@ -351,7 +347,7 @@ const TopContainer = styled.div`
   width: 100%;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 0.7rem;
+  padding: 0.5rem 0.7rem;
 `;
 
 const TopLogoContainer = styled.div`

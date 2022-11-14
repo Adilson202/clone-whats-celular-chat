@@ -14,8 +14,8 @@ const Login = () => {
       <LoginContainer>
         <Image
           src="/transparent_logo.png"
-          height={200}
-          width={200}
+          height={300}
+          width={300}
           alt="App Logo"
         />
         <LoginButton onClick={loginHandle}>
@@ -36,7 +36,7 @@ const Login = () => {
 
 const Logo = styled.div`
   background: #004aad;
-  padding: 0.5rem;
+  padding: 0.7rem;
   height: 100%;
 `;
 
@@ -50,6 +50,7 @@ const BtnText = styled.div`
 
 const LoginButton = styled.button`
   border: 2px solid #004aad;
+  border-radius: 5px;
   display: flex;
   align-items: center;
   font-family: "Roboto", sans-serif;
@@ -75,7 +76,7 @@ const LoginContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  background: #f2f2f2;
+  background: #C1FFC1;
   @media screen and (max-width: 768px) {
     width: 100%;
     height: 480px;

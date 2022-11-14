@@ -24,8 +24,7 @@ export default function Home() {
           }}
           darkMode={darkMode}
         >  
-          <h1>WHATSAPP</h1>        
-          {/* <img src="fondo.png" /> */}
+          <h1>WHATSAPP</h1>          
         </StartChatText>
       </DummyChatScreen>
     </Container>
